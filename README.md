@@ -221,6 +221,11 @@ $$
 Error = 100 \frac{|E(t)-E(0)|}{|E(0)|}
 $$
 
+$$
+Error = 100 \frac{|E(t)-E(0)|}{|E(0)|} \%
+$$
+
+
 ### Internal Energy
 
 The internal energy is calculated from the velocity variance relative to the local mean velocity.
