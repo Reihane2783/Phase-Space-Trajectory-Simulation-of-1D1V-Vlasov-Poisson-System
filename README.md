@@ -4,7 +4,7 @@ A Python implementation of a **1D1V electrostatic Vlasov–Poisson solver** base
 
 The solver follows discrete phase points in phase space, reconstructs the distribution function on an Eulerian grid using the **Method of Average**, solves the periodic Poisson equation using FFTs, and advances the system using a **Leapfrog drift–kick scheme**.
 
-The project also includes diagnostics for **energy conservation, mass conservation, recurrence, computational performance, and PPC convergence**.
+The project also includes diagnostics for **energy conservation, mass conservation, recurrence, computational performance, and PPC convergence**..
 
 ---
 
