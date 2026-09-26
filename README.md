@@ -34,39 +34,37 @@ The project also includes diagnostics for **energy conservation, mass conservati
 The 1D1V Vlasov equation is written as
 
 $$
-\frac{\partial f}{\partial t}
-+v\frac{\partial f}{\partial x}
--E\frac{\partial f}{\partial v}=0.
+\frac{\partial f}{\partial t} + v\frac{\partial f}{\partial x} - E\frac{\partial f}{\partial v} = 0
 $$
 
 The phase points follow the characteristics
 
 $$
-\frac{dx}{dt}=v,
+\frac{dx}{dt} = v
 $$
 
+and
+
 $$
-\frac{dv}{dt}=-E(x,t).
+\frac{dv}{dt} = -E(x,t)
 $$
 
 The distribution value carried by each phase point remains constant along its trajectory:
 
 $$
-\frac{df}{dt}=0.
+\frac{df}{dt} = 0
 $$
 
 The electrostatic field is obtained from the Poisson equation
 
 $$
-\frac{\partial^2\phi}{\partial x^2}
-=
-n_e-1,
+\frac{\partial^2 \phi}{\partial x^2} = n_e - 1
 $$
 
 with
 
 $$
-E=-\frac{\partial\phi}{\partial x}.
+E = -\frac{\partial \phi}{\partial x}
 $$
 
 The ion background density is normalized to unity.
@@ -78,13 +76,13 @@ The ion background density is normalized to unity.
 The PPT method stores the distribution function on moving phase points
 
 $$
-(x_p,v_p,f_p),
+(x_p, v_p, f_p)
 $$
 
 while the Poisson solver requires the distribution function on a fixed Eulerian grid
 
 $$
-f(x_i,v_j).
+f(x_i, v_j)
 $$
 
 This implementation reconstructs the distribution using the **Method of Average**.
@@ -92,10 +90,7 @@ This implementation reconstructs the distribution using the **Method of Average*
 Each phase point is assigned to its nearest phase-space grid node. If multiple phase points occupy the same node, their distribution values are averaged:
 
 $$
-f_{ij}
-=
-\frac{1}{N_{ij}}
-\sum_{p\in(i,j)} f_p.
+f_{ij} = \frac{1}{N_{ij}} \sum_{p \in (i,j)} f_p
 $$
 
 This approach avoids the explicit interpolation weights required by conventional bilinear deposition.
@@ -115,13 +110,13 @@ The Poisson equation is solved spectrally using the FFT.
 For periodic boundary conditions,
 
 $$
--k^2\phi_k=\rho_k,
+-k^2 \phi_k = \rho_k
 $$
 
 so for nonzero Fourier modes,
 
 $$
-\phi_k=-\frac{\rho_k}{k^2}.
+\phi_k = -\frac{\rho_k}{k^2}
 $$
 
 The zero Fourier mode is set to zero to fix the potential gauge.
@@ -129,7 +124,7 @@ The zero Fourier mode is set to zero to fix the potential gauge.
 The electric field is then obtained from
 
 $$
-E_k=-ik\phi_k.
+E_k = -ik\phi_k
 $$
 
 The physical-space potential and electric field are recovered using the inverse FFT.
@@ -143,56 +138,48 @@ The solver uses a staggered Leapfrog formulation.
 The phase-point position is stored at integer time steps:
 
 $$
-x^n,
+x^n
 $$
 
 while the velocity is stored at half time steps:
 
 $$
-v^{n+1/2}.
+v^{n+1/2}
 $$
 
 Each time step consists of:
 
-1. **Drift**
+### 1. Drift
 
 $$
-x^{n+1}
-=
-x^n+\Delta t\,v^{n+1/2}
+x^{n+1} = x^n + \Delta t\,v^{n+1/2}
 $$
 
-2. **Distribution reconstruction**
+### 2. Distribution Reconstruction
 
 Reconstruct $f(x,v)$ using the Method of Average.
 
-3. **Density calculation**
+### 3. Density Calculation
 
 $$
-n_e(x)
-=
-\int f(x,v)\,dv
+n_e(x) = \int f(x,v)\,dv
 $$
 
-4. **Poisson solve**
+### 4. Poisson Solve
 
 Calculate $\phi$ and $E$ on the spatial grid.
 
-5. **Field interpolation**
+### 5. Field Interpolation
 
 Interpolate the electric field from the Eulerian grid to the phase points.
 
-6. **Kick**
+### 6. Kick
 
 $$
-v^{n+3/2}
-=
-v^{n+1/2}
--
-\Delta t\,E_p
+v^{n+3/2} = v^{n+1/2} - \Delta t\,E_p
 $$
 
-7. **Velocity handling**
+### 7. Velocity Handling
 
 The velocity is clipped to the predefined velocity domain.
 
@@ -205,9 +192,7 @@ The solver provides several physical and numerical diagnostics.
 ### Total Mass
 
 $$
-M
-=
-\int\int f(x,v)\,dx\,dv
+M = \int \int f(x,v)\,dx\,dv
 $$
 
 implemented numerically using the phase-space grid.
@@ -215,37 +200,25 @@ implemented numerically using the phase-space grid.
 ### Kinetic Energy
 
 $$
-E_k
-=
-\frac{1}{2}
-\int\int
-f(x,v)v^2\,dx\,dv
+E_k = \frac{1}{2} \int \int f(x,v)v^2\,dx\,dv
 $$
 
 ### Electrostatic Energy
 
 $$
-E_E
-=
-\frac{1}{2}
-\int E^2(x)\,dx
+E_E = \frac{1}{2} \int E^2(x)\,dx
 $$
 
 ### Total Energy
 
 $$
-E_{\mathrm{total}}
-=
-E_k+E_E
+E_{\mathrm{total}} = E_k + E_E
 $$
 
 The relative energy-conservation error is calculated as
 
 $$
-\mathrm{Error}(\%)
-=
-100
-\frac{|E(t)-E(0)|}{|E(0)|}.
+\mathrm{Error}(\%) = 100\frac{|E(t)-E(0)|}{|E(0)|}
 $$
 
 ### Internal Energy
