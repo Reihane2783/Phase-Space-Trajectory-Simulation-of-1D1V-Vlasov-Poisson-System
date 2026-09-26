@@ -8,6 +8,7 @@ The project also includes diagnostics for **energy conservation, mass conservati
 
 ---
 
+
 ## Features
 
 - 1D1V electrostatic Vlasov–Poisson model
