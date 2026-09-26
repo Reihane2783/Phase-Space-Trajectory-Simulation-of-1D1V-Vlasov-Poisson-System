@@ -221,10 +221,6 @@ $$
 Error = 100 \frac{|E(t)-E(0)|}{|E(0)|}
 $$
 
-$$
-Error = 100 \frac{|E(t)-E(0)|}{|E(0)|} \%
-$$
-
 
 ### Internal Energy
 
